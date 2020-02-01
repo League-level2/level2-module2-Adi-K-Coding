@@ -55,8 +55,8 @@ void draw() {
   drawFood();
   move();
   drawSnake();
-eat();
-checkBoundaries();
+  eat();
+  checkBoundaries();
 }
 
 void drawFood() {
@@ -69,7 +69,7 @@ void drawSnake() {
   //Draw the head of the snake followed by its tail
   fill(255, 0, 0);
   rect(snakeHead.x, snakeHead.y, 10, 10);
-manageTail();
+  manageTail();
 }
 
 
@@ -80,22 +80,29 @@ manageTail();
 
 void drawTail() {
   //Draw each segment of the tail
-  for(int i=0;i<tail.size();i++){
- rect(tail.get(i).x,tail.get(i).y,10,10);
+  for (int i=0; i<tail.size(); i++) {
+    rect(tail.get(i).x, tail.get(i).y, 10, 10);
   }
 }
 
 void manageTail() {
   //After drawing the tail, add a new segment at the "start" of the tail and remove the one at the "end" 
   //This produces the illusion of the snake tail moving.
-checkTailCollision();
-drawTail();
-tail.add(new Segment(snakeHead.x, snakeHead.y));
-
+  checkTailCollision();
+  drawTail();
+  tail.add(new Segment(snakeHead.x, snakeHead.y));
+  tail.remove(0);
 }
 
 void checkTailCollision() {
   //If the snake crosses its own tail, shrink the tail back to one segment
+  for (int i=0; i<tail.size(); i++) {
+    if (snakeHead.x==tail.get(i).x&&snakeHead.y==tail.get(i).y) {
+    score=1;
+    tail=new ArrayList<Segment>();
+    tail.add(new Segment(snakeHead.x,snakeHead.y));
+    }
+  }
 }
 
 
@@ -109,13 +116,13 @@ void keyPressed() {
   //Set the direction of the snake according to the arrow keys pressed
   if (key ==CODED) {
     if (keyCode==UP&&direction!=DOWN) {
-   direction=UP;
+      direction=UP;
     } else if (keyCode==DOWN&&direction!=UP) {
-    direction=DOWN;
-    }else if(keyCode==LEFT&&direction!=RIGHT){
+      direction=DOWN;
+    } else if (keyCode==LEFT&&direction!=RIGHT) {
       direction=LEFT;
-    }else if(keyCode==RIGHT&&direction!=LEFT){
-     direction=RIGHT; 
+    } else if (keyCode==RIGHT&&direction!=LEFT) {
+      direction=RIGHT;
     }
   }
 }
@@ -165,10 +172,10 @@ void checkBoundaries() {
 
 void eat() {
   //When the snake eats the food, its tail should grow and more food appear
-  if(snakeHead.x==foodX&&snakeHead.y==foodY){
-  score=score+1;
-  foodX=((int)random(50)*10);
-  foodY=((int)random(50)*10);
-tail.add(new Segment(snakeHead.x,snakeHead.y));  
-}
+  if (snakeHead.x==foodX&&snakeHead.y==foodY) {
+    score=score+1;
+    foodX=((int)random(50)*10);
+    foodY=((int)random(50)*10);
+    tail.add(new Segment(snakeHead.x, snakeHead.y));
+  }
 }
